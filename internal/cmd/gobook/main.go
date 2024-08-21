@@ -14,13 +14,8 @@ import (
 )
 
 func main() {
-	db, err := sql.Open("sqlite", "./books.db")
-
-	if err != nil {
-		panic(err)
-	}
-	
-	defer db.Close() // "using" of c#
+	db := openCon()
+	defer db.Close()
 
 	bookService := service.NewBookService(db)
 
@@ -36,4 +31,14 @@ func main() {
 	PORT := "8080"
 	fmt.Println("SERVER IS RUNNING ON: http://localhost:", PORT)
 	http.ListenAndServe(":" + PORT, router)
+}
+
+func openCon() *sql.DB {
+	db, err := sql.Open("sqlite", "./books.db")
+
+	if err != nil {
+		panic(err)
+	}
+
+	return db;
 }
