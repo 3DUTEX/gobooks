@@ -9,6 +9,10 @@ type Book struct {
 	Genre  string
 }
 
+func NewBookService(db *sql.DB) *BookService {
+	return &BookService{db: db}
+}
+
 // método em GO
 func (b Book) GetFullBook() string {
 	return b.Title + " by " + b.Author
