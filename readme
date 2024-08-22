@@ -1,0 +1,7 @@
+#Light Threads
+
+- Threads criadas no runtime do GO (2Kb)
+
+#Channels
+
+- Utilizado para compartilhar informações entre as goroutines
