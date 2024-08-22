@@ -78,7 +78,6 @@ func (s *BookService) GetBookByID(id int) (*Book, error) {
 	if err != nil {
 		return nil, err
 	}
-
 		return &book, nil
  }
 
@@ -92,6 +91,33 @@ func (s *BookService) GetBookByID(id int) (*Book, error) {
 	query := "DELETE FROM books WHERE Id = ?"
 	_, err := s.db.Exec(query, id)
 	return err
+ }
+
+ func (s *BookService) SearchBooksByName(name string) ([]Book, error) {
+		query := "SELECT Id, Title, Author, Genre FROM books WHERE Title like ?"
+		
+		rows, err := s.db.Query(query, "%"+ name +"%")
+
+		defer rows.Close()
+
+		if err != nil {
+			return nil, err
+		}
+
+		var books []Book
+		for rows.Next() {
+			var book Book
+
+			err := rows.Scan(&book.ID, &book.Title, &book.Author, &book.Genre)
+
+			if err != nil {
+				continue
+			}
+
+			books = append(books, book)
+		}
+
+		return books, nil
  }
 
  // SimulateReading simula a leitura de um livro com base em um tempo de leitura.
