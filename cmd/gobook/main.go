@@ -4,7 +4,9 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"os"
 
+	"gobooks/internal/cli"
 	"gobooks/internal/service"
 	"gobooks/internal/web"
 
@@ -20,6 +22,12 @@ func main() {
 	bookService := service.NewBookService(db)
 
 	bookHandlers := web.NewBookHandlers(bookService)
+
+	if len(os.Args) > 1 && (os.Args[1] == "search" || os.Args[1] == "simulate") {
+		bookCLI := cli.NewBookCLI(bookService)
+		bookCLI.Run()
+		return
+	}
 
 	router := http.NewServeMux()
 	router.HandleFunc("GET /books", bookHandlers.GetBooks)
